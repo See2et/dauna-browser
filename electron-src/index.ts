@@ -3,7 +3,7 @@ import { join } from 'path'
 import { format } from 'url'
 
 // Packages
-import { BrowserWindow, app, ipcMain, IpcMainEvent } from 'electron'
+import { BrowserWindow, app, ipcMain, IpcMainEvent, BrowserView } from 'electron'
 import isDev from 'electron-is-dev'
 import prepareNext from 'electron-next'
 
@@ -11,7 +11,7 @@ import prepareNext from 'electron-next'
 app.on('ready', async () => {
   await prepareNext('./renderer')
 
-  const mainWindow = new BrowserWindow({
+  const win = new BrowserWindow({
     width: 800,
     height: 600,
     webPreferences: {
@@ -29,7 +29,21 @@ app.on('ready', async () => {
         slashes: true,
       })
 
-  mainWindow.loadURL(url)
+  const view = new BrowserView();
+  win.addBrowserView(view);
+  view.setBounds({ x: 0, y: 0, width: 400, height: 600 });
+  view.setAutoResize({horizontal: true, vertical: true});
+  view.webContents.loadURL(url);
+
+  const view2 = new BrowserView();
+  win.addBrowserView(view2);
+  view2.setBounds({ x: 400, y: 0, width: 400, height: 600 });
+  view2.setAutoResize({horizontal: true, vertical: true});
+  view2.webContents.loadURL("https://www.google.com/")
+
+
+  view.webContents.openDevTools();
+  view.webContents.executeJavaScript(`console.log(document)`);
 })
 
 // Quit the app once all windows are closed

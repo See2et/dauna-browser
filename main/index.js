@@ -13,7 +13,7 @@ const electron_next_1 = __importDefault(require("electron-next"));
 // Prepare the renderer once the app is ready
 electron_1.app.on('ready', async () => {
     await (0, electron_next_1.default)('./renderer');
-    const mainWindow = new electron_1.BrowserWindow({
+    const win = new electron_1.BrowserWindow({
         width: 800,
         height: 600,
         webPreferences: {
@@ -29,7 +29,18 @@ electron_1.app.on('ready', async () => {
             protocol: 'file:',
             slashes: true,
         });
-    mainWindow.loadURL(url);
+    const view = new electron_1.BrowserView();
+    win.addBrowserView(view);
+    view.setBounds({ x: 0, y: 0, width: 400, height: 600 });
+    view.setAutoResize({ horizontal: true, vertical: true });
+    view.webContents.loadURL(url);
+    const view2 = new electron_1.BrowserView();
+    win.addBrowserView(view2);
+    view2.setBounds({ x: 400, y: 0, width: 400, height: 600 });
+    view2.setAutoResize({ horizontal: true, vertical: true });
+    view2.webContents.loadURL("https://www.google.com/");
+    view.webContents.openDevTools();
+    view.webContents.executeJavaScript(`console.log(document)`);
 });
 // Quit the app once all windows are closed
 electron_1.app.on('window-all-closed', electron_1.app.quit);
