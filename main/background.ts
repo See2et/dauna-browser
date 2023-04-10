@@ -1,6 +1,7 @@
 import { app, BrowserView, Menu, MenuItem } from 'electron';
 import serve from 'electron-serve';
 import { createWindow } from './helpers';
+import { addView, addWin, getView, getWin } from './utils/manageBrowserViews';
 
 const isProd: boolean = process.env.NODE_ENV === 'production';
 
@@ -13,32 +14,15 @@ if (isProd) {
 (async () => {
   await app.whenReady();
 
-  const mainWindow = createWindow('main', {
-    width: 1000,
+  addWin('main', '1234', {
+    width: 800,
     height: 600,
-  });
-
-  const mainView = new BrowserView();
-  mainWindow.addBrowserView(mainView);
-  mainView.setBounds({ x: 0, y: 0, width: 500, height: 600 });
-  mainView.setAutoResize({ width: true, height: true });
-  mainView.webContents.loadURL('https://duckduckgo.com');
-
-  const subView = new BrowserView();
-  mainWindow.addBrowserView(subView);
-  subView.setBounds({ x: 500, y: 0, width: 500, height: 600 });
-  subView.setAutoResize({ width: true, height: true });
-  subView.webContents.loadURL('https://google.com');
-
-  const views = [mainView, subView];
-
-  views.map(view => {
-    view.webContents.on('before-input-event', (event, input) => {
-      const inputKey = input.key.toLowerCase();
-      console.log('input: ', inputKey);
-      event.preventDefault();
-    })
   })
+
+  addView('1234', '5678')
+
+  getView('5678').setBounds({ x: 0, y: 0, width: 800, height: 600 });
+  getView('5678').webContents.loadURL('https://www.google.com');
 })();
 
 app.on('window-all-closed', () => {
