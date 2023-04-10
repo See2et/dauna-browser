@@ -55,6 +55,6 @@ export function getView(id: string) {
 }
 
 export function getViews() {
-  const views = wins.map(win => win.views.map(view => view.view));
+  const views = wins.map(win => win.views).flat();
   return views;
 }
