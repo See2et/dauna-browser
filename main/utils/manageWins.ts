@@ -53,3 +53,8 @@ export function getView(id: string) {
   if (!view) return null;
   return view;
 }
+
+export function getViews() {
+  const views = wins.map(win => win.views.map(view => view.view));
+  return views;
+}
