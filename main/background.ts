@@ -1,7 +1,7 @@
 import { app, BrowserView, Menu, MenuItem } from 'electron';
 import serve from 'electron-serve';
 import { createWindow } from './helpers';
-import { addView, addWin, getView, getWin } from './utils/manageBrowserViews';
+import { addView, addWin, getView, getWin } from './utils/manageWins';
 
 const isProd: boolean = process.env.NODE_ENV === 'production';
 
