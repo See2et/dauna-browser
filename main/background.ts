@@ -1,4 +1,4 @@
-import { app } from 'electron';
+import { app, BrowserView, Menu, MenuItem } from 'electron';
 import serve from 'electron-serve';
 import { createWindow } from './helpers';
 
@@ -18,13 +18,27 @@ if (isProd) {
     height: 600,
   });
 
-  if (isProd) {
-    await mainWindow.loadURL('app://./home.html');
-  } else {
-    const port = process.argv[2];
-    await mainWindow.loadURL(`http://localhost:${port}/home`);
-    mainWindow.webContents.openDevTools();
-  }
+  const mainView = new BrowserView();
+  mainWindow.addBrowserView(mainView);
+  mainView.setBounds({ x: 0, y: 0, width: 500, height: 600 });
+  mainView.setAutoResize({ width: true, height: true });
+  mainView.webContents.loadURL('https://duckduckgo.com');
+
+  const subView = new BrowserView();
+  mainWindow.addBrowserView(subView);
+  subView.setBounds({ x: 500, y: 0, width: 500, height: 600 });
+  subView.setAutoResize({ width: true, height: true });
+  subView.webContents.loadURL('https://google.com');
+
+  const views = [mainView, subView];
+
+  views.map(view => {
+    view.webContents.on('before-input-event', (event, input) => {
+      const inputKey = input.key.toLowerCase();
+      console.log('input: ', inputKey);
+      event.preventDefault();
+    })
+  })
 })();
 
 app.on('window-all-closed', () => {
