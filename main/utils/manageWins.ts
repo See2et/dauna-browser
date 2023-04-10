@@ -26,8 +26,8 @@ export async function addWin(name: string, id: string, opt: BrowserWindowConstru
 
 export async function getWin(id: string) {
   const win = wins.find(win => win.id === id);
-  if (!win) return;
-    return win.win;
+  if (!win) return null;
+  return win.win;
 }
 
 export function addView(parentId: string, id: string, opt?: BrowserViewConstructorOptions) {
@@ -48,8 +48,8 @@ export function addView(parentId: string, id: string, opt?: BrowserViewConstruct
 
 export function getView(id: string) {
   const win = wins.find(win => win.views.find(view => view.id === id));
-  if (!win) return;
+  if (!win) return null;
   const view = win.views.find(view => view.id === id).view;
-  if (!view) return;
+  if (!view) return null;
   return view;
 }
