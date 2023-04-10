@@ -14,7 +14,7 @@ interface managedView {
 
 let wins: managedWin[] = [];
 
-export async function addWin(name: string, id: string, opt: BrowserWindowConstructorOptions) {
+export function addWin(name: string, id: string, opt: BrowserWindowConstructorOptions) {
   if (wins.find(win => win.id === id)) return;
   const win = new BrowserWindow(opt);
   wins.push({
@@ -24,7 +24,7 @@ export async function addWin(name: string, id: string, opt: BrowserWindowConstru
   });
 }
 
-export async function getWin(id: string) {
+export function getWin(id: string) {
   const win = wins.find(win => win.id === id);
   if (!win) return null;
   return win.win;
